@@ -1,0 +1,88 @@
+package com.example.lab1
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+
+        // Зв'язування елементів XML з змінними
+        val inputHP = findViewById<EditText>(R.id.inputHP)
+        val inputCP = findViewById<EditText>(R.id.inputCP)
+        val inputSP = findViewById<EditText>(R.id.inputSP)
+        val inputNP = findViewById<EditText>(R.id.inputNP)
+        val inputOP = findViewById<EditText>(R.id.inputOP)
+        val inputWP = findViewById<EditText>(R.id.inputWP)
+        val inputAP = findViewById<EditText>(R.id.inputAP)
+        val calculateButton = findViewById<Button>(R.id.calculateButton)
+
+        calculateButton.setOnClickListener {
+            // Зчитування введених даних
+            val hp = inputHP.text.toString().toDoubleOrNull() ?: 0.0
+            val cp = inputCP.text.toString().toDoubleOrNull() ?: 0.0
+            val sp = inputSP.text.toString().toDoubleOrNull() ?: 0.0
+            val np = inputNP.text.toString().toDoubleOrNull() ?: 0.0
+            val op = inputOP.text.toString().toDoubleOrNull() ?: 0.0
+            val wp = inputWP.text.toString().toDoubleOrNull() ?: 0.0
+            val ap = inputAP.text.toString().toDoubleOrNull() ?: 0.0
+
+            // Розрахунки коефіцієнтів переходу
+            val kpc = 100 / (100 - wp)
+            val kpg = 100 / (100 - wp - ap)
+
+            // Розрахунки для сухої маси
+            val hc = hp * kpc
+            val cc = cp * kpc
+            val sc = sp * kpc
+            val nc = np * kpc
+            val oc = op * kpc
+            val ac = ap * kpc
+
+            // Розрахунки для горючої маси
+            val hg = hp * kpg
+            val cg = cp * kpg
+            val sg = sp * kpg
+            val ng = np * kpg
+            val og = op * kpg
+
+            // Розрахунок теплоти згоряння
+            var Qrn = (339 * cp + 1030 * hp - 108.8 * (op - sp) - 25 * wp) / 1000
+            Qrn = (Qrn * 1000) / 1000
+
+            var Qcn = (Qrn + 0.025 * wp) * kpc
+            Qcn = (Qcn * 1000) / 1000
+
+            var Qgn = (Qrn + 0.025 * wp) * kpg
+            Qgn = (Qgn * 1000) / 1000
+
+            // Передача даних до ResultActivity
+            intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("kpc_val", kpc)
+            intent.putExtra("kpg_val", kpg)
+            intent.putExtra("hc_val", hc)
+            intent.putExtra("cc_val", cc)
+            intent.putExtra("sc_val", sc)
+            intent.putExtra("nc_val", nc)
+            intent.putExtra("oc_val", oc)
+            intent.putExtra("ac_val", ac)
+            intent.putExtra("hg_val", hg)
+            intent.putExtra("cg_val", cg)
+            intent.putExtra("sg_val", sg)
+            intent.putExtra("ng_val", ng)
+            intent.putExtra("og_val", og)
+            intent.putExtra("finalQrn", Qrn)
+            intent.putExtra("finalQcn", Qcn)
+            intent.putExtra("finalQgn", Qgn)
+            startActivity(intent)
+        }
+    }
+}
