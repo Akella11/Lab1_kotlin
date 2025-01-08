@@ -1,0 +1,79 @@
+package com.example.lab1
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+class ResultActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_result)
+
+        // Отримання переданих даних з MainActivity
+        val krs = intent.getDoubleExtra("kpc_val", 0.0)
+        val krg = intent.getDoubleExtra("kpg_val", 0.0)
+
+        val hs = intent.getDoubleExtra("hc_val", 0.0)
+        val cs = intent.getDoubleExtra("cc_val", 0.0)
+        val ss = intent.getDoubleExtra("sc_val", 0.0)
+        val ns = intent.getDoubleExtra("nc_val", 0.0)
+        val os = intent.getDoubleExtra("oc_val", 0.0)
+        val asValue = intent.getDoubleExtra("ac_val", 0.0)
+
+        val hg = intent.getDoubleExtra("hg_val", 0.0)
+        val cg = intent.getDoubleExtra("cg_val", 0.0)
+        val sg = intent.getDoubleExtra("sg_val", 0.0)
+        val ng = intent.getDoubleExtra("ng_val", 0.0)
+        val og = intent.getDoubleExtra("og_val", 0.0)
+
+        val qrH = intent.getDoubleExtra("finalQrn", 0.0)
+        val qcH = intent.getDoubleExtra("finalQcn", 0.0)
+        val qgH = intent.getDoubleExtra("finalQgn", 0.0)
+
+        // Відображення коефіцієнтів переходу
+        findViewById<TextView>(R.id.resultKRS).text = "Коефіцієнт переходу від робочої" +
+                " до сухої маси становить: ${String.format("%.2f", krs)}"
+        findViewById<TextView>(R.id.resultKRG).text = "Коефіцієнт переходу від робочої" +
+                " до горючої маси становить: ${String.format("%.2f", krg)}"
+
+        // Відображення складу сухої маси
+        findViewById<TextView>(R.id.resultHS).text = "Склад сухої маси палива становитиме:" +
+                " HС=${String.format("%.2f", hs)}%; CС=${String.format("%.2f", cs)}%;" +
+                " SС=${String.format("%.2f", ss)}%; NС=${String.format("%.3f", ns)}%;" +
+                " OС=${String.format("%.2f", os)}%; АС=${String.format("%.2f", asValue)}%"
+
+        // Відображення складу горючої маси
+        findViewById<TextView>(R.id.resultHG).text = "Склад горючої маси палива становитиме:" +
+                " HГ=${String.format("%.2f", hg)}%; CГ=${String.format("%.2f", cg)}%;" +
+                " SГ=${String.format("%.2f", sg)}%; NГ=${String.format("%.3f", ng)}%;" +
+                " OГ=${String.format("%.2f", og)}%"
+
+        // Відображення нижчої теплоти згоряння для різних мас
+        findViewById<TextView>(R.id.resultQRH).text = "Нижча теплота згоряння для робочої" +
+                " маси за заданим складом компонентів палива\n" +
+                "становить: ${String.format("%.4f", qrH)} MJ/kg"
+
+        findViewById<TextView>(R.id.resultQCH).text = "Нижча теплота згоряння для сухої" +
+                " маси за заданим складом компонентів палива\n" +
+                "становить: ${String.format("%.4f", qcH)} MJ/kg"
+
+        findViewById<TextView>(R.id.resultQGH).text = "Нижча теплота згоряння для горючої" +
+                " маси за заданим складом компонентів палива\n" +
+                "становить: ${String.format("%.4f", qgH)} MJ/kg"
+
+        // Кнопка для повернення до MainActivity
+        val backButton: Button = findViewById(R.id.backButton)
+        backButton.setOnClickListener(){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
+        }
+    }
+}
